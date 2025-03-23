@@ -22,7 +22,53 @@
             <input type="checkbox" id="player1-accept">
         </div>
         <!-- Repeat for other players -->
-        <!-- ... -->
+        <div>
+            <h2>Player 2</h2>
+            <label for="player2-name">Name:</label>
+            <input type="text" id="player2-name">
+            <label for="player2-bet">Bet Amount:</label>
+            <input type="number" id="player2-bet">
+            <label for="player2-guess">Guess (1-25):</label>
+            <input type="number" id="player2-guess" min="1" max="25">
+            <label for="player2-accept">Accept Double or Nothing:</label>
+            <input type="checkbox" id="player2-accept">
+        </div>
+        
+        <div>
+            <h2>Player 3</h2>
+            <label for="player3-name">Name:</label>
+            <input type="text" id="player3-name">
+            <label for="player3-bet">Bet Amount:</label>
+            <input type="number" id="player3-bet">
+            <label for="player3-guess">Guess (1-25):</label>
+            <input type="number" id="player3-guess" min="1" max="25">
+            <label for="player3-accept">Accept Double or Nothing:</label>
+            <input type="checkbox" id="player3-accept">
+        </div>
+        
+        <div>
+            <h2>Player 4</h2>
+            <label for="player4-name">Name:</label>
+            <input type="text" id="player4-name">
+            <label for="player4-bet">Bet Amount:</label>
+            <input type="number" id="player4-bet">
+            <label for="player4-guess">Guess (1-25):</label>
+            <input type="number" id="player4-guess" min="1" max="25">
+            <label for="player4-accept">Accept Double or Nothing:</label>
+            <input type="checkbox" id="player4-accept">
+        </div>
+        
+        <div>
+            <h2>Player 5</h2>
+            <label for="player5-name">Name:</label>
+            <input type="text" id="player5-name">
+            <label for="player5-bet">Bet Amount:</label>
+            <input type="number" id="player5-bet">
+            <label for="player5-guess">Guess (1-25):</label>
+            <input type="number" id="player5-guess" min="1" max="25">
+            <label for="player5-accept">Accept Double or Nothing:</label>
+            <input type="checkbox" id="player5-accept">
+        </div>
     </div>
     
     <button onclick="playGame()">Play Game</button>
@@ -53,7 +99,7 @@
 
         function playGame() {
             const players = [];
-            for (let i = 1; i <= 5; i++) {
+            for (let i = 1; i <= 10; i++) {
                 const playerData = getPlayerData(i);
                 if (playerData) {
                     players.push(playerData);
@@ -108,7 +154,7 @@
 
         function doubleOrNothing() {
             const players = [];
-            for (let i = 1; i <= 5; i++) {
+            for (let i = 1; i <= 10; i++) {
                 const playerData = getPlayerData(i);
                 if (playerData) {
                     players.push(playerData);
@@ -139,7 +185,7 @@
         function resetGame() {
             clearTimeout(timer);
             clearInterval(countdown);
-            for (let i = 1; i <= 5; i++) {
+            for (let i = 1; i <= 10; i++) {
                 document.getElementById(`player${i}-name`).value = '';
                 document.getElementById(`player${i}-bet`).value = '';
                 document.getElementById(`player${i}-guess`).value = '';
