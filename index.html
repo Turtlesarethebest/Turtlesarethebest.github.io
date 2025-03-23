@@ -15,8 +15,8 @@
             <input type="text" id="player1-name">
             <label for="player1-bet">Bet Amount:</label>
             <input type="number" id="player1-bet">
-            <label for="player1-guess">Guess (1-10):</label>
-            <input type="number" id="player1-guess">
+            <label for="player1-guess">Guess (1-25):</label>
+            <input type="number" id="player1-guess" min="1" max="25">
             <label for="player1-accept">Accept Double or Nothing:</label>
             <input type="checkbox" id="player1-accept">
         </div>
@@ -27,8 +27,8 @@
             <input type="text" id="player2-name">
             <label for="player2-bet">Bet Amount:</label>
             <input type="number" id="player2-bet">
-            <label for="player2-guess">Guess (1-10):</label>
-            <input type="number" id="player2-guess">
+            <label for="player2-guess">Guess (1-25):</label>
+            <input type="number" id="player2-guess" min="1" max="25">
             <label for="player2-accept">Accept Double or Nothing:</label>
             <input type="checkbox" id="player2-accept">
         </div>
@@ -39,8 +39,8 @@
             <input type="text" id="player3-name">
             <label for="player3-bet">Bet Amount:</label>
             <input type="number" id="player3-bet">
-            <label for="player3-guess">Guess (1-10):</label>
-            <input type="number" id="player3-guess">
+            <label for="player3-guess">Guess (1-25):</label>
+            <input type="number" id="player3-guess" min="1" max="25">
             <label for="player3-accept">Accept Double or Nothing:</label>
             <input type="checkbox" id="player3-accept">
         </div>
@@ -51,8 +51,8 @@
             <input type="text" id="player4-name">
             <label for="player4-bet">Bet Amount:</label>
             <input type="number" id="player4-bet">
-            <label for="player4-guess">Guess (1-10):</label>
-            <input type="number" id="player4-guess">
+            <label for="player4-guess">Guess (1-25):</label>
+            <input type="number" id="player4-guess" min="1" max="25">
             <label for="player4-accept">Accept Double or Nothing:</label>
             <input type="checkbox" id="player4-accept">
         </div>
@@ -63,15 +63,15 @@
             <input type="text" id="player5-name">
             <label for="player5-bet">Bet Amount:</label>
             <input type="number" id="player5-bet">
-            <label for="player5-guess">Guess (1-10):</label>
-            <input type="number" id="player5-guess">
+            <label for="player5-guess">Guess (1-25):</label>
+            <input type="number" id="player5-guess" min="1" max="25">
             <label for="player5-accept">Accept Double or Nothing:</label>
             <input type="checkbox" id="player5-accept">
         </div>
     </div>
     
     <button onclick="playGame()">Play Game</button>
-    <button onclick="doubleOrNothing()">Double or Nothing</button>
+    <button onclick="startDoubleOrNothing()">Double or Nothing</button>
     <button onclick="resetGame()">Reset</button>
     <h2 id="result"></h2>
     <h2 id="total-spent"></h2>
@@ -79,6 +79,7 @@
 
     <script>
         let isDoubleOrNothing = false;
+        let timer;
 
         function getPlayerData(playerNumber) {
             const playerName = document.getElementById(`player${playerNumber}-name`).value;
@@ -107,7 +108,7 @@
             }
 
             let totalPot = players.reduce((acc, player) => acc + player.bet, 0);
-            const correctNumber = Math.floor(Math.random() * 10) + 1;
+            const correctNumber = Math.floor(Math.random() * 25) + 1;
             let resultMessage = `The correct number was ${correctNumber}. `;
             const winners = players.filter(player => player.guess === correctNumber);
 
@@ -127,6 +128,12 @@
             document.getElementById('result').innerText = resultMessage;
             document.getElementById('total-spent').innerText = `Total money spent: $${totalSpent}`;
             isDoubleOrNothing = false;
+        }
+
+        function startDoubleOrNothing() {
+            clearTimeout(timer);
+            document.getElementById('result').innerText = "Double or Nothing started. Waiting for players to accept...";
+            timer = setTimeout(doubleOrNothing, 30000); // 30 seconds timer
         }
 
         function doubleOrNothing() {
@@ -150,7 +157,7 @@
                 document.getElementById('result').innerText = "All players accepted Double or Nothing. Bets have been doubled.";
                 isDoubleOrNothing = true;
             } else {
-                document.getElementById('result').innerText = "Not all players accepted Double or Nothing.";
+                document.getElementById('result').innerText = "Not all players accepted Double or Nothing. The game ends.";
                 isDoubleOrNothing = false;
             }
 
@@ -158,6 +165,7 @@
         }
 
         function resetGame() {
+            clearTimeout(timer);
             for (let i = 1; i <= 5; i++) {
                 document.getElementById(`player${i}-name`).value = '';
                 document.getElementById(`player${i}-bet`).value = '';
