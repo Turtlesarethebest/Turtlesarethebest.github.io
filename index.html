@@ -171,7 +171,7 @@
                 resultMessage += "More than one player guessed correctly. Nobody wins. Play again.";
             } else if (winners.length === 1) {
                 if (isDoubleOrNothing) {
-                    totalPot = originalPot * 2;
+                    totalPot *= 2; // Ensure the total pot is doubled
                 }
                 resultMessage += `Congratulations ${winners[0].name}! You guessed the correct number and won $${totalPot}!`;
             } else {
