@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+</head>
+<body>
+    <h1>Number Guessing Game</h1>
+
+    <div id="players">
+        <div>
+            <h2>Player 1</h2>
+            <label for="player1-name">Name:</label>
+            <input type="text" id="player1-name">
+            <label for="player1-bet">Bet Amount:</label>
+            <input type="number" id="player1-bet">
+            <label for="player1-guess">Guess (1-10):</label>
+            <input type="number" id="player1-guess">
+            <label for="player1-accept">Accept Double or Nothing:</label>
+            <input type="checkbox" id="player1-accept">
+        </div>
+        
+        <div>
+            <h2>Player 2</h2>
+            <label for="player2-name">Name:</label>
+            <input type="text" id="player2-name">
+            <label for="player2-bet">Bet Amount:</label>
+            <input type="number" id="player2-bet">
+            <label for="player2-guess">Guess (1-10):</label>
+            <input type="number" id="player2-guess">
+            <label for="player2-accept">Accept Double or Nothing:</label>
+            <input type="checkbox" id="player2-accept">
+        </div>
+        
+        <div>
+            <h2>Player 3</h2>
+            <label for="player3-name">Name:</label>
+            <input type="text" id="player3-name">
+            <label for="player3-bet">Bet Amount:</label>
+            <input type="number" id="player3-bet">
+            <label for="player3-guess">Guess (1-10):</label>
+            <input type="number" id="player3-guess">
+            <label for="player3-accept">Accept Double or Nothing:</label>
+            <input type="checkbox" id="player3-accept">
+        </div>
+        
+        <div>
+            <h2>Player 4</h2>
+            <label for="player4-name">Name:</label>
+            <input type="text" id="player4-name">
+            <label for="player4-bet">Bet Amount:</label>
+            <input type="number" id="player4-bet">
+            <label for="player4-guess">Guess (1-10):</label>
+            <input type="number" id="player4-guess">
+            <label for="player4-accept">Accept Double or Nothing:</label>
+            <input type="checkbox" id="player4-accept">
+        </div>
+        
+        <div>
+            <h2>Player 5</h2>
+            <label for="player5-name">Name:</label>
+            <input type="text" id="player5-name">
+            <label for="player5-bet">Bet Amount:</label>
+            <input type="number" id="player5-bet">
+            <label for="player5-guess">Guess (1-10):</label>
+            <input type="number" id="player5-guess">
+            <label for="player5-accept">Accept Double or Nothing:</label>
+            <input type="checkbox" id="player5-accept">
+        </div>
+    </div>
+    
+    <button onclick="playGame()">Play Game</button>
+    <button onclick="doubleOrNothing()">Double or Nothing</button>
+    <button onclick="resetGame()">Reset</button>
+    <h2 id="result"></h2>
+    <h2 id="total-spent"></h2>
+    <h2 id="accept-count"></h2>
+
+    <script>
+        let isDoubleOrNothing = false;
+
+        function getPlayerData(playerNumber) {
+            const playerName = document.getElementById(`player${playerNumber}-name`).value;
+            const playerBet = parseFloat(document.getElementById(`player${playerNumber}-bet`).value);
+            const playerGuess = parseInt(document.getElementById(`player${playerNumber}-guess`).value);
+            const playerAccept = document.getElementById(`player${playerNumber}-accept`).checked;
+
+            if (playerName && !isNaN(playerBet) && !isNaN(playerGuess)) {
+                return { name: playerName, bet: playerBet, guess: playerGuess, accept: playerAccept };
+            }
+            return null;
+        }
+
+        function playGame() {
+            const players = [];
+            for (let i = 1; i <= 5; i++) {
+                const playerData = getPlayerData(i);
+                if (playerData) {
+                    players.push(playerData);
+                }
+            }
+
+            if (players.length < 2) {
+                document.getElementById('result').innerText = "Not enough players to play the game.";
+                return;
+            }
+
+            let totalPot = players.reduce((acc, player) => acc + player.bet, 0);
+            const correctNumber = Math.floor(Math.random() * 10) + 1;
+            let resultMessage = `The correct number was ${correctNumber}. `;
+            const winners = players.filter(player => player.guess === correctNumber);
+
+            if (winners.length > 1) {
+                resultMessage += "More than one player guessed correctly. Nobody wins. Play again.";
+            } else if (winners.length === 1) {
+                if (isDoubleOrNothing) {
+                    totalPot *= 2;
+                }
+                resultMessage += `Congratulations ${winners[0].name}! You guessed the correct number and won $${totalPot}!`;
+            } else {
+                resultMessage += "No one guessed correctly. No one wins the pot.";
+            }
+
+            const totalSpent = players.reduce((acc, player) => acc + player.bet, 0);
+
+            document.getElementById('result').innerText = resultMessage;
+            document.getElementById('total-spent').innerText = `Total money spent: $${totalSpent}`;
+            isDoubleOrNothing = false;
+        }
+
+        function doubleOrNothing() {
+            const players = [];
+            for (let i = 1; i <= 5; i++) {
+                const playerData = getPlayerData(i);
+                if (playerData) {
+                    players.push(playerData);
+                }
+            }
+
+            if (players.length < 2) {
+                document.getElementById('result').innerText = "Not enough players to play the game.";
+                return;
+            }
+
+            const acceptCount = players.filter(player => player.accept).length;
+
+            if (acceptCount === players.length) {
+                players.forEach(player => player.bet *= 2);
+                document.getElementById('result').innerText = "All players accepted Double or Nothing. Bets have been doubled.";
+                isDoubleOrNothing = true;
+            } else {
+                document.getElementById('result').innerText = "Not all players accepted Double or Nothing.";
+                isDoubleOrNothing = false;
+            }
+
+            document.getElementById('accept-count').innerText = `Accepted Double or Nothing: ${acceptCount}/${players.length}`;
+        }
+
+        function resetGame() {
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById(`player${i}-name`).value = '';
+                document.getElementById(`player${i}-bet`).value = '';
+                document.getElementById(`player${i}-guess`).value = '';
+                document.getElementById(`player${i}-accept`).checked = false;
+            }
+            document.getElementById('result').innerText = '';
+            document.getElementById('total-spent').innerText = '';
+            document.getElementById('accept-count').innerText = '';
+            isDoubleOrNothing = false;
+        }
+    </script>
+</body>
+</html>
